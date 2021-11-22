@@ -4,19 +4,21 @@
         <script src="https://unpkg.com/react-dom@15.7.0/dist/react-dom.js"></script>
         <script src="https://unpkg.com/react@15.7.0/dist/react.js"></script>
         <script type="text/babel">
-            class Car extends React.component{
+            class Car extends react.component{
                 render(){
                     return <p> i am a car!!</p>
                 }
             }
+            
         </script>
     </head>
     <body>
         <div id="root"></div>
         <script type="text/babel">
               var s =<p>hello wolrd</p>
-              React.render(s,document.getElementById("root"));
-              React.render(<Car/>,document.getElementById("root"));
+              react.render(s,document.getElementById("root"));
+              react.render(<Car/>,document.getElementById("root"));
+              document.getElementById("root").innerHTMl="<p>pippo</p>";
         </script>
     </body>
 </html>
