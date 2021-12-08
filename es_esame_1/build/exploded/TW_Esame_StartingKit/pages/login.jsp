@@ -10,7 +10,7 @@
 <title>login</title>
 </head>
 <body>
-<jsp:useBean id= "users" scope= "application"  class= "beans.Users" type= "beans.Users" >  </jsp:useBean>
+<jsp:useBean id= "users" scope= "application"  class= "beans.Users" >  </jsp:useBean>
   
 <% 
 if(session.getAttribute("logged")!=null && session.getAttribute("logged").equals(true))request.getRequestDispatcher("/pages/productList.jsp").forward(request,response);

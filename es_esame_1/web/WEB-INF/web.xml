@@ -28,6 +28,15 @@
 	<url-pattern>/products</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+	<servlet-name>attrazioni</servlet-name>
+	<jsp-file>/pages/attrazioni.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+	<servlet-name>attrazioni</servlet-name>
+	<url-pattern>/attrazioni</url-pattern>
+	</servlet-mapping>
+
 	<!-- === Welcome files ============================================================== -->
 
 	<welcome-file-list>
