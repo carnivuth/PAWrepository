@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+
+<!-- type definitions-->
+<xs:complextype name="nomeType">	
+	<xs:sequence>
+		<xs:element name="nomeproprio" type="xs:string"/>
+		<xs:element name="secondonome" type="xs:string" minOccours="0" maxOccours="unbounded"/>
+		<xs:element name="cognome" type="xs:string"/>
+	</xs:sequence>
+</xs:complextype>
+
+<xs:complextype name="indirizzoType">	
+	<xs:sequence>
+		<xs:element name="via" type="xs:string"  maxOccours="unbounded"/>
+		<xs:element name="indirizzopostale" type="xs:string" />
+		<xs:element name="provincia" type="xs:string" minOccours="0"/>
+		<xs:element name="stato" type="xs:string" />
+	</xs:sequence>
+</xs:complextype>
+<xs:simpleType name="telefonoType">
+<xs:restriction base="xs:string" >
+<xs:pattern value="[0-9]{10}"/>
+</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="emailType">
+<xs:restriction base="xs:string" >
+<xs:pattern value="*@*"/>
+</xs:restriction>
+</xs:simpleType>
+
+<xs:complextype name="informazioneType">
+	<xs:sequence>
+		<xs:element name="nome" type="nomeType"/>
+		<xs:element name="indirizzo" type="indirizzoType" minOccours="0" maxOccours="unbounded"/>
+		<xs:element name="telefono" type="telefonoType"/>
+		<xs:element name="email" type="emailType" minOccours="0" maxOccours="unbounded"/>
+		<xs:element name="nazionalita" type="xs:string"  minOccours="0"/>
+		<xs:element name="note" type="xs:string" minOccours="0" maxOccours="unbounded"/>
+	</xs:sequence>
+</xs:complextype>
+<!------------------>
+
+<xs:element name="adressList"  >
+<xs:complexType>
+	<xs:sequence>
+		<xs:element name="informazione" type="informazoineType" maxOccours="unbounded"></xs:element>
+	</xs:sequence>
+</xs:complexType>
+</xs:element>
+
+</xs:schema>

@@ -1,0 +1,29 @@
+
+<?xml version="1.0" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+
+<!-- type definitions-->
+<xs:complexType name="nameType">	
+	<xs:sequence>
+		<xs:element name="paragrafo" type="xs:string"/>
+	</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="letteraType">
+	<xs:sequence>
+		<xs:element name="mittente" type="xs:string"/>
+		<xs:element name="mittente" type="xs:string"/>
+		<xs:element name="mittente" type="xs:string"/>
+		<xs:element name="mittente" type="xs:string"/>
+		<xs:element name="corpo" type="corpoType"/>
+		<xs:element name="mittente" type="xs:string"/>
+		<xs:element name="mittente" type="xs:string"/>
+	</xs:sequence>
+</xs:complexType>
+<!------------------>
+
+<xs:element name="lettera" type="letteraType" >
+
+
+</xs:schema>
