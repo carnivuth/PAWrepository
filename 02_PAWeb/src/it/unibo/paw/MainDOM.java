@@ -1,40 +1,52 @@
 package it.unibo.paw;
 
-import java.io.File;
 import java.io.IOException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
+import xmlUtils.XmlLoader;
 
 
 public class MainDOM {
 
 	public static void main(String[] args) {
-try {
+		try {	
 			int nPersone=0;
-			DocumentBuilderFactory dbf= DocumentBuilderFactory.newInstance();
-			dbf.setValidating(true);
-			DocumentBuilder db=dbf.newDocumentBuilder();
-			db.setErrorHandler(new DefaultHandler());
-			Document doc=db.parse(new File("resources/AddressList.xml"));
+			int nPersoneBeforeMickey=0;
+			boolean afterMickey=false;
+			Document doc=XmlLoader.docLoader("resources/AddressList.xml");
 			
-			for(int i =0; i <doc.getChildNodes().getLength();i++) {
-				Node n =doc.getChildNodes().item(i);
-				if(n!=null) {
-					System.out.println(n.getNodeName());
-					if( n.getNodeName().equals("Information"))nPersone++;
-		
+			//recupero root element
+			Node root= doc.getElementsByTagName("Address_list").item(0);
+			Node information;
+			//main cycle
+			for(int i =0; i <root.getChildNodes().getLength();i++) {
+				
+				information =root.getChildNodes().item(i);
+				
+				if(information!=null) {
+						
+					if( information.getNodeName().equals("Information")) {
+					
+						nPersone++;
+
+						if(information.getChildNodes().item(1).
+								getChildNodes().item(1).getTextContent().equals("Mickey")) {
+							afterMickey=true;
+						}
+						if(!afterMickey)nPersoneBeforeMickey++;
+						
+					}
+					
+					
+					
 				}
 			}
+			
 			System.out.println(nPersone);
-			
-			
+			System.out.println(nPersoneBeforeMickey);
+	
 		} catch (ParserConfigurationException e) {
 		
 			e.printStackTrace();
