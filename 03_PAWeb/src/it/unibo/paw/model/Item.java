@@ -1,4 +1,4 @@
-package it.unibo.paw.db;
+package it.unibo.paw.model;
 
 public class Item {
 	private int codeItem;

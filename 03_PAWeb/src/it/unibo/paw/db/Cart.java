@@ -3,6 +3,8 @@ package it.unibo.paw.db;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.unibo.paw.model.Item;
+
 public class Cart {
 	private int codeCart;
 	private List<Item> items;
