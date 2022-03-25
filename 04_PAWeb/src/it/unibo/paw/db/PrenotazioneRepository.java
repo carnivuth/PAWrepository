@@ -5,9 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import it.unibo.paw.model.NumeroTavolo;
 import it.unibo.paw.model.Prenotazione;
 import it.unibo.paw.model.Tavolo;
 
@@ -203,6 +205,61 @@ public class PrenotazioneRepository {
         }
         return prenotazioni;
     }   
+    public boolean RichiestaPrenotazione(String cognome, Date data,int numeroPersone,String cellulare) {
+    	return true;
+    }
+    public NumeroTavolo DisponibilitaTavolo(Date data,int numeroPersone) {
+    	PreparedStatement statement = null;
+    	Connection connection=null;
+    	ResultSet result=null;
+    	NumeroTavolo nt=null;
+    	try {
+			connection = this.dataSource.getConnection();
+			String query="SELECT id, numerotavolo FROM TAVOLI WHERE CAPIENZA>= ?AND ID NOT IN ("
+					+ "SELECT IDTAVOLO FROM PRENOTAZIONI WHERE DATA=?) ";
+			statement=connection.prepareStatement(query);
+			statement.setInt(1, numeroPersone);
+			statement.setDate(2, data);
+			
+			if(statement.execute()) {
+				result=statement.getResultSet();
+				if(result!=null) {
+					nt=new NumeroTavolo();
+					nt.setIdTavolo(result.getInt("id"));
+					nt.setNumeroTavolo(result.getString("numeroTavolo"));
+					
+				}
+			}
+			
+		} catch (PersistenceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(statement!=null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(connection!=null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+        
+    	
+    	
+    	return nt;
+    }
 
     
     
