@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import it.unibo.paw.model.Prenotazione;
-import it.unibo.paw.model.Student;
 import it.unibo.paw.model.Tavolo;
 
 public class PrenotazioneRepository {
@@ -122,7 +121,7 @@ public class PrenotazioneRepository {
         }
     }
 
-    public Tavolo findByPrimaryKey(int code) throws PersistenceException {
+    public Prenotazione findByPrimaryKey(int code) throws PersistenceException {
         Prenotazione p= null;
         
         Connection connection = this.dataSource.getConnection();
@@ -135,9 +134,11 @@ public class PrenotazioneRepository {
             if (result.next()) {
                 p = new Prenotazione();
                 p.setId(result.getInt("id"));
-                p.setId(result.getInt("id"));
-                p.setId(result.getInt("id"));
-                p.setCapienza(result.getInt("capienza"));
+                p.setNumeroPersone(result.getInt("numeroPersone"));
+                p.setCognome(result.getString("cognome"));
+                p.setCellulare(result.getString("cellulare"));
+                p.setData(result.getDate("data"));
+                p.setIdTavolo(result.getInt("idTavolo"));
                 }
         }
         catch (SQLException e) {
@@ -153,12 +154,12 @@ public class PrenotazioneRepository {
                 throw new PersistenceException(e.getMessage());
             }
         }
-        return t;
+        return p;
     }   
     
-    public List<Student> findAll() throws PersistenceException {
-        List<Student> students = null;
-        Student student = null;
+    public List<Prenotazione> findAll() throws PersistenceException {
+        List<Prenotazione> prenotazioni = null;
+        Prenotazione p= null;
         Connection connection = this.dataSource.getConnection();
         PreparedStatement statement = null;
         String query = "select * from students";
@@ -166,21 +167,25 @@ public class PrenotazioneRepository {
             statement = connection.prepareStatement(query);
             ResultSet result = statement.executeQuery();
             if(result.next()) {
-                students = new LinkedList<Student>();
-                student = new Student();
-                student.setCode(result.getInt("code"));
-                student.setFirstName(result.getString("firstname"));
-                student.setLastName(result.getString("lastname"));
-                student.setBirthDate(new java.util.Date(result.getDate("birthdate").getTime()));
-                students.add(student);
-            }
+                prenotazioni = new LinkedList<Prenotazione>();
+                p = new Prenotazione();
+                p.setId(result.getInt("id"));
+                p.setNumeroPersone(result.getInt("numeroPersone"));
+                p.setCognome(result.getString("cognome"));
+                p.setCellulare(result.getString("cellulare"));
+                p.setData(result.getDate("data"));
+                p.setIdTavolo(result.getInt("idTavolo"));
+                prenotazioni.add(p);
+                }
             while(result.next()) {
-                student = new Student();
-                student.setCode(result.getInt("code"));
-                student.setFirstName(result.getString("firstname"));
-                student.setLastName(result.getString("lastname"));
-                student.setBirthDate(new java.util.Date(result.getDate("birthdate").getTime()));
-                students.add(student);
+            	p = new Prenotazione();
+                p.setId(result.getInt("id"));
+                p.setNumeroPersone(result.getInt("numeroPersone"));
+                p.setCognome(result.getString("cognome"));
+                p.setCellulare(result.getString("cellulare"));
+                p.setData(result.getDate("data"));
+                p.setIdTavolo(result.getInt("idTavolo"));
+                prenotazioni.add(p);
             }
         }
         catch (SQLException e) {
@@ -196,52 +201,9 @@ public class PrenotazioneRepository {
                 throw new PersistenceException(e.getMessage());
             }
         }
-        return students;
+        return prenotazioni;
     }   
 
-    public List<Student> findStudentsByBirthDate(java.util.Date birthDate) throws PersistenceException {
-        List<Student> students = null;
-        Student student = null;
-        Connection connection = this.dataSource.getConnection();
-        PreparedStatement statement = null;
-        String query = "select * from students where birthdate=?";
-        try {
-            statement = connection.prepareStatement(query);
-            statement.setDate(1, new java.sql.Date(birthDate.getTime()));
-            ResultSet result = statement.executeQuery();
-            if(result.next()) {
-                students = new LinkedList<Student>();
-                student = new Student();
-                student.setCode(result.getInt("code"));
-                student.setFirstName(result.getString("firstname"));
-                student.setLastName(result.getString("lastname"));
-                student.setBirthDate(birthDate);
-                students.add(student);
-            }
-            while(result.next()) {
-                student = new Student();
-                student.setCode(result.getInt("code"));
-                student.setFirstName(result.getString("firstname"));
-                student.setLastName(result.getString("lastname"));
-                student.setBirthDate(birthDate);
-                students.add(student);
-                }
-        }
-        catch (SQLException e) {
-            throw new PersistenceException(e.getMessage());
-        }
-        finally {
-            try {
-                if (statement != null) 
-                    statement.close();
-                if (connection!= null)
-                    connection.close();
-            }
-            catch (SQLException e) {
-                throw new PersistenceException(e.getMessage());
-            }
-        }
-        return students;
-    }
+    
     
 }
