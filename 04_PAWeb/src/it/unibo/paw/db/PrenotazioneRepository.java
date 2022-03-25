@@ -206,7 +206,56 @@ public class PrenotazioneRepository {
         return prenotazioni;
     }   
     public boolean RichiestaPrenotazione(String cognome, Date data,int numeroPersone,String cellulare) {
-    	return true;
+    	
+    	NumeroTavolo nt=null;
+    	
+    	if((nt=DisponibilitaTavolo(data, numeroPersone))!=null) {
+    		
+    		PreparedStatement statement = null;
+        	Connection connection=null;
+        	try {
+    			connection = this.dataSource.getConnection();
+    			//preparazine della query 
+    			String query="INSERT INTO PRENOTAZIONI(cognome, cellulare, numeroPersone, data,idTavolo) "
+    					+ "values(?,?,?,?,?)";
+    			statement=connection.prepareStatement(query);
+    			statement.setString(1, cognome);
+    			statement.setString(2, cellulare);
+    			statement.setInt(3, numeroPersone);
+    			statement.setDate(4, data);
+    			statement.setInt(5, nt.getIdTavolo());
+    			//controllo del corretto inserimento della prenotazione nel db
+    			if(statement.execute()) {
+    				return true;
+    			}
+    			
+    		} catch (PersistenceException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		} catch (SQLException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}finally {
+    			if(statement!=null) {
+    				try {
+    					statement.close();
+    				} catch (SQLException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				}
+    			}
+    			if(connection!=null) {
+    				try {
+    					connection.close();
+    				} catch (SQLException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				}
+    			}
+    		}
+    		
+    	}
+    	return false;
     }
     public NumeroTavolo DisponibilitaTavolo(Date data,int numeroPersone) {
     	PreparedStatement statement = null;
