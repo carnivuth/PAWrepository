@@ -11,7 +11,6 @@ import java.util.List;
 
 import it.unibo.paw.model.NumeroTavolo;
 import it.unibo.paw.model.Prenotazione;
-import it.unibo.paw.model.Tavolo;
 
 public class PrenotazioneRepository {
     private DataSource dataSource;
