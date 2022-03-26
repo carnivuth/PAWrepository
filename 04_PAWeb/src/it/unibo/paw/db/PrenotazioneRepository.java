@@ -37,8 +37,8 @@ public class PrenotazioneRepository {
 	                + " cellulare CHAR(8), " 
 	                + "numeroPersone INT NOT NULL, "
 	                + "data DATE  NOT NULL,"
-	                + "idTavolo INT "
-	                + "constraint tavolo UNIQUE (idTavolo,data)"
+	                + "idTavolo INT NOT NULL, "
+	                + "constraint tavolo UNIQUE (idTavolo,data),"
 	                +"constraint id_prenotazione UNIQUE (Cognome,data)"
 	                
 	            
@@ -66,7 +66,7 @@ public class PrenotazioneRepository {
     public void persist(Prenotazione t) throws PersistenceException{
         Connection connection = this.dataSource.getConnection();
 
-        if (findByPrimaryKey(t.getId())!=null) 
+        if (t.getId()!=0 && findByPrimaryKey(t.getId())!=null) 
             throw new PersistenceException("Prenotazione exists");
                 
         PreparedStatement statement = null; 
@@ -100,7 +100,7 @@ public class PrenotazioneRepository {
         Connection connection = this.dataSource.getConnection();
 
         PreparedStatement statement = null;
-        String delete = "delete from students where code = ?";
+        String delete = "delete from prenotazioni where code = ?";
         try {
             statement = connection.prepareStatement(delete);
             statement.setInt(1, p.getId());
@@ -163,7 +163,7 @@ public class PrenotazioneRepository {
         Prenotazione p= null;
         Connection connection = this.dataSource.getConnection();
         PreparedStatement statement = null;
-        String query = "select * from students";
+        String query = "select * from prenotazioni";
         try {
             statement = connection.prepareStatement(query);
             ResultSet result = statement.executeQuery();
@@ -232,7 +232,7 @@ public class PrenotazioneRepository {
     	NumeroTavolo nt=null;
     	try {
 			connection = this.dataSource.getConnection();
-			String query="SELECT id, numerotavolo FROM TAVOLI WHERE CAPIENZA>= ?AND ID NOT IN ("
+			String query="SELECT id, numero FROM TAVOLI WHERE CAPIENZA>= ?AND ID NOT IN ("
 					+ "SELECT IDTAVOLO FROM PRENOTAZIONI WHERE DATA=?) ";
 			statement=connection.prepareStatement(query);
 			statement.setInt(1, numeroPersone);
@@ -240,26 +240,27 @@ public class PrenotazioneRepository {
 			
 			if(statement.execute()) {
 				result=statement.getResultSet();
-				if(result!=null) {
+				if(result.next()) {
 					nt=new NumeroTavolo();
 					nt.setIdTavolo(result.getInt("id"));
-					nt.setNumeroTavolo(result.getString("numeroTavolo"));
-					
+					nt.setNumeroTavolo(result.getString("numero"));
+					return nt;
 				}
 			}
 			
+			
 		} catch (PersistenceException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}finally {
 			if(statement!=null) {
 				try {
 					statement.close();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
@@ -267,15 +268,16 @@ public class PrenotazioneRepository {
 				try {
 					connection.close();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
 		}
+    	return null;
         
     	
     	
-    	return nt;
+    	
     }
 
     

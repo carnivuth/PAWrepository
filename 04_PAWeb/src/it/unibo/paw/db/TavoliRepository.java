@@ -32,7 +32,7 @@ public class TavoliRepository {
 	            "CREATE TABLE tavoli ("	
 	            	+ "id INT NOT NULL PRIMARY KEY generated always as identity(start with 1 increment by 1	),"
 	                + "numero varchar(40) NOT NULL unique,"
-	                + "capienza INT NOT NULL, "      
+	                + "capienza INT NOT NULL "      
 	            + ") "
 	        );
 	        statement.close ();

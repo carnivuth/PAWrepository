@@ -24,7 +24,7 @@ public class PrenotazioneRistorante {
 		try {
 			while((op=r.readLine())!=null) {
 				
-				if(op=="1") {
+				if(op.equals("1")) {
 					System.out.println("inserire cognome");
 					cognome=r.readLine();
 					System.out.println("inserire cellulare");
