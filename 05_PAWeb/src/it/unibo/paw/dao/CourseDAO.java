@@ -3,11 +3,11 @@ package it.unibo.paw.dao;
 import java.util.List;
 
 public interface CourseDAO {
-	public void create(StudentDTO student);
+	public void create(CourseDTO course);
 
 	public CourseDTO read(int code);
 
-	public boolean update(StudentDTO student);
+	public boolean update(CourseDTO course);
 
 	public boolean delete(int code);
 	
@@ -15,6 +15,6 @@ public interface CourseDAO {
 
 	public boolean dropTable();
 	
-	public List <CourseDTO> findCoursesByStudentID(int sudentID);
+	public List <CourseDTO> findCoursesByStudentID(int courseID);
 
 }
