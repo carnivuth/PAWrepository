@@ -3,6 +3,7 @@ package it.unibo.paw.dao.mysql;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+import it.unibo.paw.dao.CourseDAO;
 import it.unibo.paw.dao.DAOFactory;
 import it.unibo.paw.dao.StudentDAO;
 
@@ -63,6 +64,12 @@ public class MySqlDAOFactory extends DAOFactory {
 	@Override
 	public StudentDAO getStudentDAO() {
 		return new MySqlStudentDAO();
+	}
+
+	@Override
+	public CourseDAO getCourseDAO() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/*@Override

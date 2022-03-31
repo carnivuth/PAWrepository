@@ -3,6 +3,7 @@ package it.unibo.paw.dao.hsqldb;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+import it.unibo.paw.dao.CourseDAO;
 import it.unibo.paw.dao.DAOFactory;
 import it.unibo.paw.dao.StudentDAO;
 
@@ -77,6 +78,12 @@ public class HsqldbDAOFactory extends DAOFactory {
 	@Override
 	public StudentDAO getStudentDAO() {
 		return new HsqldbStudentDAO();
+	}
+
+	@Override
+	public CourseDAO getCourseDAO() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/*@Override
