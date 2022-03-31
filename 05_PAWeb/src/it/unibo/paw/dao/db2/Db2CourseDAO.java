@@ -1,6 +1,8 @@
 package it.unibo.paw.dao.db2;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -27,9 +29,6 @@ public class Db2CourseDAO implements CourseDAO {
 			"FROM " + TABLE + " " +
 			"WHERE " + ID + " = ? ";
 
-	// SELECT * FROM table WHERE stringcolumn = ?;
-	private static final String READ_ALL = "SELECT * " +
-			"FROM " + TABLE + " ";
 
 	
 
@@ -61,22 +60,146 @@ public class Db2CourseDAO implements CourseDAO {
 	@Override
 	public void create(CourseDTO course) {
 		
+		PreparedStatement statement=null;
+		Connection connection =Db2DAOFactory.createConnection();
+		try {
+			
+			 statement =connection.prepareStatement(INSERT);
+			 statement.setInt(1, course.getId());
+			 statement.setString(1, course.getCourseName());
+			statement.execute();
+		} catch (SQLException e) {
+		
+			e.printStackTrace();
+		}finally {
+			if(statement!=null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection!=null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
 		
 	}
 	@Override
 	public CourseDTO read(int code) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		CourseDTO result=null;
+		ResultSet  r=null;
+		PreparedStatement statement=null;
+		Connection connection =Db2DAOFactory.createConnection();
+		try {
+			
+			 statement =connection.prepareStatement(READ_BY_ID);
+			 statement.setInt(1, code);
+			 if(statement.execute()) {
+				
+				r=statement.getResultSet();
+				if(r!=null) {
+					
+					result=new CourseDTO();
+					result.setCourseName(r.getString(2));
+					result.setId(r.getInt(1));
+				}
+			 }
+			
+		} catch (SQLException e) {
+		
+			e.printStackTrace();
+		}finally {
+			if(statement!=null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection!=null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
 	}
 	@Override
 	public boolean update(CourseDTO course) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean result=false;
+		PreparedStatement statement=null;
+		Connection connection =Db2DAOFactory.createConnection();
+		try {
+			
+			 statement =connection.prepareStatement(UPDATE);
+			 statement.setString(1, course.getCourseName());
+			 statement.setInt(2,course.getId());
+			if(statement.execute()) {
+				result=true;
+			}
+		} catch (SQLException e) {
+		
+			e.printStackTrace();
+		}finally {
+			if(statement!=null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection!=null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
 	}
 	@Override
 	public boolean delete(int code) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean result=false;
+		PreparedStatement statement=null;
+		Connection connection =Db2DAOFactory.createConnection();
+		try {
+			
+			 statement =connection.prepareStatement(DELETE);
+			 statement.setInt(1, code);
+			 
+			if(statement.execute()) {
+				result=true;
+			}
+		} catch (SQLException e) {
+		
+			e.printStackTrace();
+		}finally {
+			if(statement!=null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection!=null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
 	}
 	@Override
 	public boolean createTable() {
