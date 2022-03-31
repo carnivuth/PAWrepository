@@ -1,5 +1,8 @@
 package it.unibo.paw.dao.db2;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -18,8 +21,8 @@ public class Db2DAOFactory extends DAOFactory {
 	 */
 	public static final String DBURL = "jdbc:db2://diva.deis.unibo.it:50000/tw_stud";
 
-	public static final String USERNAME = "xxx";
-	public static final String PASSWORD = "xxx";
+	public static  String USERNAME = "xxx";
+	public static  String PASSWORD = "xxx";
 
 	// --------------------------------------------
 
@@ -27,6 +30,10 @@ public class Db2DAOFactory extends DAOFactory {
 	static {
 		try {
 			Class.forName(DRIVER);
+			BufferedReader cr = new BufferedReader(new FileReader(new File("resources/dbcredentials.txt")));
+			USERNAME = cr.readLine();
+			PASSWORD = cr.readLine();
+			cr.close();
 		} 
 		catch (Exception e) {
 			System.err.println(Db2DAOFactory.class.getName()+": failed to load DB2 JDBC driver" + "\n" + e.toString());
