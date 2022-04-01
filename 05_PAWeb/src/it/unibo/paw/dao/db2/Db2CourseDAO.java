@@ -5,12 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 
 
 import it.unibo.paw.dao.CourseDAO;
 import it.unibo.paw.dao.CourseDTO;
+import it.unibo.paw.dao.CoursesStudentsMappingDAO;
+import it.unibo.paw.dao.CoursesStudentsMappingDTO;
+import it.unibo.paw.dao.DAOFactory;
 
 public class Db2CourseDAO implements CourseDAO {
 	
@@ -54,7 +58,13 @@ public class Db2CourseDAO implements CourseDAO {
 	private static final String DROP = "DROP " +
 			"TABLE " + TABLE + " ";	
 	
-	private static final String FIND_COURSES_BY_STUDENT_ID="";
+	private static final String FIND_COURSES_BY_STUDENT_ID="SELECT * FROM "
+			+TABLE+ " WHERE " + ID + " IN ("
+					+ "SELECT "
+					+ Db2CoursesStudentsMappingDAO.ID_COURSE+" FROM "
+					+Db2CoursesStudentsMappingDAO.TABLE 
+					+ " WHERE "+Db2CoursesStudentsMappingDAO.ID_STUDENT+" = ?"
+											+ " )";
 	
 	
 	@Override
@@ -107,8 +117,8 @@ public class Db2CourseDAO implements CourseDAO {
 				if(r!=null) {
 					
 					result=new CourseDTO();
-					result.setCourseName(r.getString(2));
-					result.setId(r.getInt(1));
+					result.setCourseName(r.getString(COURSE_NAME));
+					result.setId(r.getInt(ID));
 				}
 			 }
 			
@@ -266,9 +276,55 @@ public class Db2CourseDAO implements CourseDAO {
 		return result;
 	}
 	@Override
-	public List<CourseDTO> findCoursesByStudentID(int courseID) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CourseDTO> findCoursesByStudentID(int StudentID) {
+		
+		List<CourseDTO>result= null;
+		CourseDTO element=null;
+		PreparedStatement statement=null;
+		ResultSet r=null;
+		Connection connection =Db2DAOFactory.createConnection();
+		
+		try {
+			statement=connection.prepareStatement(FIND_COURSES_BY_STUDENT_ID);
+			statement.setInt(1, StudentID);
+			
+			if(statement.execute()) {
+				r=statement.getResultSet();
+			
+				if(r!=null) {
+					result =new ArrayList<CourseDTO>();
+					element =new CourseDTO();
+					element.setId(r.getInt(ID));
+					element.setCourseName(r.getString(COURSE_NAME));
+					result.add(element);
+				}
+				while(r.next()) {
+					element =new CourseDTO();
+					element.setId(r.getInt(ID));
+					element.setCourseName(r.getString(COURSE_NAME));
+					result.add(element);
+				
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			if(statement!=null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection!=null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
 	}
 	
 

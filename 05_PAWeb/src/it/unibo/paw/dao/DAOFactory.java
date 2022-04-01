@@ -52,6 +52,6 @@ public abstract class DAOFactory {
 	
 	public abstract CourseDAO getCourseDAO();
 
-	//public abstract CourseStudentMappingDAO getStudentCourseMappingDAO();
+	public abstract CoursesStudentsMappingDAO getStudentCourseMappingDAO();
 	
 }
