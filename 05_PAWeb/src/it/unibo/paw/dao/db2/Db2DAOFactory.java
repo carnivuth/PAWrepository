@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 import it.unibo.paw.dao.CourseDAO;
+import it.unibo.paw.dao.CoursesStudentsMappingDAO;
 import it.unibo.paw.dao.DAOFactory;
 import it.unibo.paw.dao.StudentDAO;
 
@@ -93,6 +94,12 @@ public class Db2DAOFactory extends DAOFactory {
 	@Override
 	public CourseDAO getCourseDAO() {
 		return new Db2CourseDAO();
+	}
+
+	@Override
+	public CoursesStudentsMappingDAO getStudentCourseMappingDAO() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	/*@Override
