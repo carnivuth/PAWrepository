@@ -19,6 +19,7 @@ public interface StudentDAO {
 	// ----------------------------------
 
 	public List<StudentDTO> findStudentByLastName(String lastName);
+	public List<StudentDTO> findStudentByCourseId(int courseId);
 
 	// ----------------------------------
 

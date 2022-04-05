@@ -3,9 +3,12 @@ package it.unibo.paw.dao.db2;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import it.unibo.paw.dao.CourseDTO;
 import it.unibo.paw.dao.StudentDAO;
 import it.unibo.paw.dao.StudentDTO;
 
@@ -65,6 +68,14 @@ public class Db2StudentDAO implements StudentDAO {
 
 	private static final String find_student_by_lastname = read_all +
 			"WHERE " + LASTNAME + " = ? ";
+	
+	private static final String FIND_STUDENTS_BY_COURSE_ID="SELECT * FROM "
+			+TABLE+ " WHERE " + ID + " IN ("
+					+ "SELECT "
+					+ Db2CoursesStudentsMappingDAO.ID_STUDENT+" FROM "
+					+Db2CoursesStudentsMappingDAO.TABLE 
+					+ " WHERE "+Db2CoursesStudentsMappingDAO.ID_COURSE+" = ?"
+											+ " )";
 
 	// DELETE FROM table WHERE idcolumn = ?;
 	private static final String delete = "DELETE " +
@@ -454,6 +465,61 @@ public class Db2StudentDAO implements StudentDAO {
 			Db2DAOFactory.closeConnection(conn);
 		}
 		// --- 7. Restituzione del risultato (eventualmente di fallimento)
+		return result;
+	}
+
+	@Override
+	public List<StudentDTO> findStudentByCourseId(int courseId) {
+		List<StudentDTO>result= null;
+		StudentDTO element=null;
+		PreparedStatement statement=null;
+		ResultSet r=null;
+		Connection connection =Db2DAOFactory.createConnection();
+		
+		try {
+			statement=connection.prepareStatement(FIND_STUDENTS_BY_COURSE_ID);
+			statement.setInt(1, courseId);
+			
+			if(statement.execute()) {
+				r=statement.getResultSet();
+			
+				if(r!=null) {
+					result =new ArrayList<StudentDTO>();
+					element =new StudentDTO();
+					element.setId(r.getInt(ID));
+					element.setBirthDate(r.getDate(BIRTHDATE));
+					element.setFirstName(r.getString(FIRSTNAME));
+					element.setLastName(r.getString(LASTNAME));
+					result.add(element);
+				}
+				while(r.next()) {
+					element =new StudentDTO();
+					element.setId(r.getInt(ID));
+					element.setBirthDate(r.getDate(BIRTHDATE));
+					element.setFirstName(r.getString(FIRSTNAME));
+					element.setLastName(r.getString(LASTNAME));
+					result.add(element);
+				
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			if(statement!=null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection!=null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		return result;
 	}
 

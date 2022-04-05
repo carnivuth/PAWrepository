@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 import it.unibo.paw.dao.CourseDAO;
+import it.unibo.paw.dao.CoursesStudentsMappingDAO;
 import it.unibo.paw.dao.DAOFactory;
 import it.unibo.paw.dao.StudentDAO;
 
@@ -82,6 +83,12 @@ public class HsqldbDAOFactory extends DAOFactory {
 
 	@Override
 	public CourseDAO getCourseDAO() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CoursesStudentsMappingDAO getStudentCourseMappingDAO() {
 		// TODO Auto-generated method stub
 		return null;
 	}
