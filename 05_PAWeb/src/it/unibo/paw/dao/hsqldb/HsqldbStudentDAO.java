@@ -457,4 +457,10 @@ public class HsqldbStudentDAO implements StudentDAO {
 		return result;
 	}
 
+	@Override
+	public List<StudentDTO> findStudentByCourseId(int courseId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
