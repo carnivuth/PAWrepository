@@ -6,7 +6,7 @@ public class Piatto {
 	
 	private int id;
 	private String nome;
-	private String tipologia;
+	private Tipologia tipo;
 
 	public int getId() {
 		return id;
@@ -24,12 +24,13 @@ public class Piatto {
 		this.nome = nome;
 	}
 
-	public String getTipologia() {
-		return tipologia;
+
+	public Tipologia getTipo() {
+		return tipo;
 	}
 
-	public void setTipologia(String tipologia) {
-		this.tipologia = tipologia;
+	public void setTipo(Tipologia tipo) {
+		this.tipo = tipo;
 	}
 	
 
