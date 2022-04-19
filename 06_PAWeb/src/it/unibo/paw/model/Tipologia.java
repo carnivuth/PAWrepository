@@ -14,6 +14,7 @@ public enum Tipologia {
 	public void setValue(String value) {
 		this.value = value;
 	}
+	
 	private String value;
 	
 }

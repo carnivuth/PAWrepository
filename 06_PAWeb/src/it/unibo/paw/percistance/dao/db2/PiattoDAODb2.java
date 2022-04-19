@@ -1,6 +1,14 @@
 package it.unibo.paw.percistance.dao.db2;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import it.unibo.paw.model.Piatto;
+import it.unibo.paw.model.Tipologia;
+import it.unibo.paw.percistance.dao.iterfaces.IdBroker;
 import it.unibo.paw.percistance.dao.iterfaces.PiattoDAO;
 
 public class PiattoDAODb2 implements PiattoDAO {
@@ -54,37 +62,222 @@ public class PiattoDAODb2 implements PiattoDAO {
 
 	@Override
 	public void create(Piatto p) {
-		// TODO Auto-generated method stub
+		PreparedStatement statement=null;
+		Connection connection =Db2DAOFactory.createConnection();
+		IdBroker idBr=new IdBrokerDb2();
+		try {
+			
+			 statement =connection.prepareStatement(CREATE);
+			 statement.setInt(1, idBr.newId());
+			 statement.setString(2,p.getNome() );
+			 statement.setString(3, p.getTipo().getValue());
+			statement.execute();
+		} catch (SQLException e) {
+		
+			e.printStackTrace();
+		}finally {
+			if(statement!=null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection!=null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		
+
 
 	}
 
 	@Override
 	public Piatto read(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Piatto result=null;
+		ResultSet  r=null;
+		PreparedStatement statement=null;
+		Connection connection =Db2DAOFactory.createConnection();
+		try {
+			
+			 statement =connection.prepareStatement(READ);
+			 statement.setInt(1, id);
+			 if(statement.execute()) {
+				
+				r=statement.getResultSet();
+				if(r!=null) {
+					
+					result=new Piatto();
+					result.setId(r.getInt(ID));
+					result.setNome(r.getString(NOME));
+					result.setTipo(Tipologia.valueOf(r.getString(TIPOLOGIA)));
+				}
+			 }
+			
+		} catch (SQLException e) {
+		
+			e.printStackTrace();
+		}finally {
+			if(statement!=null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection!=null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
 	}
 
 	@Override
 	public void update(Piatto p) {
-		// TODO Auto-generated method stub
+		
+		PreparedStatement statement=null;
+		Connection connection =Db2DAOFactory.createConnection();
+		try {
+			
+			 statement =connection.prepareStatement(UPDATE);
+			 statement.setString(1,p.getNome());
+			 statement.setString(2,p.getTipo().getValue());
+			 statement.setInt(3,p.getId());
+			if(statement.execute()) {
+				
+			}
+		} catch (SQLException e) {
+		
+			e.printStackTrace();
+		}finally {
+			if(statement!=null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection!=null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
 
 	}
 
 	@Override
 	public void delete(int id) {
-		// TODO Auto-generated method stub
+		
+		PreparedStatement statement=null;
+		Connection connection =Db2DAOFactory.createConnection();
+		try {
+			
+			 statement =connection.prepareStatement(DELETE);
+			 statement.setInt(1, id);
+			 
+			if(statement.execute()) {
+				
+			}
+		} catch (SQLException e) {
+		
+			e.printStackTrace();
+		}finally {
+			if(statement!=null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection!=null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	
 
 	}
-
 	@Override
 	public void createTable() {
-		// TODO Auto-generated method stub
-
+		Statement statement=null;
+		Connection connection =Db2DAOFactory.createConnection();
+		try {
+			
+			 statement =connection.createStatement();
+			if(statement.execute(CREATE)) {
+				
+			}
+		} catch (SQLException e) {
+		
+			e.printStackTrace();
+		}finally {
+			if(statement!=null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection!=null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	
+		
+		
 	}
 
 	@Override
 	public void dropTable() {
-		// TODO Auto-generated method stub
+		Statement statement=null;
+		Connection connection =Db2DAOFactory.createConnection();
+		try {
+			
+			 statement =connection.createStatement();
+			if(statement.execute(DROP_TABLE)) {
+				
+			}
+		} catch (SQLException e) {
+		
+			e.printStackTrace();
+		}finally {
+			if(statement!=null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection!=null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+
 
 	}
 
